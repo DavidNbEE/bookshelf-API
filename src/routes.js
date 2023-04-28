@@ -19,12 +19,12 @@ const routes = [
   },
   {
     method: 'PUT',
-    path: '/books/{id}',
+    path: '/books/{bookId}',
     handler: editDataBooksHandler,
   },
   {
     method: 'DELETE',
-    path: '/books/{id}',
+    path: '/books/{bookId}',
     handler: deleteBooksHandler,
   },
 ];

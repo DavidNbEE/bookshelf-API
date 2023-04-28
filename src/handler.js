@@ -14,6 +14,7 @@ const addBooksHandler = (request, h) => {
     response.code(400);
     return response;
   }
+
   if (readPage > pageCount) {
     const response = h.response({
       status: 'fail',
@@ -24,6 +25,7 @@ const addBooksHandler = (request, h) => {
   }
 
   const id = nanoid(16);
+  const finished = pageCount === readPage;
   const insertedAt = new Date().toISOString();
   const updatedAt = insertedAt;
 
@@ -33,7 +35,7 @@ const addBooksHandler = (request, h) => {
 
   books.push(newBooks);
 
-  const isSuccess = books.filter((note) => note.id === id).length > 0;
+  const isSuccess = books.filter((book) => book.id === id).length > 0;
   if (isSuccess) {
     const response = h.response({
       status: 'success',
@@ -45,6 +47,13 @@ const addBooksHandler = (request, h) => {
     response.code(201);
     return response;
   }
+
+  const response = h.response({
+    status: 'fail',
+    message: 'Buku gagal ditambahkan'
+  });
+  response.code(500);
+  return response;
 };
 
 const getBooksHandler = (request, h) => {
@@ -103,7 +112,7 @@ const getBooksIdHandler = (request, h) => {
 const editDataBooksHandler = (request, h) => {
   const { bookId } = request.params;
 
-  const {name, year, author, summary, publisher, pageCount, readPage, reading} = request.payload;
+  const { name, year, author, summary, publisher, pageCount, readPage, reading} = request.payload;
 
   if (!name) {
     const response = h.response({
@@ -122,7 +131,7 @@ const editDataBooksHandler = (request, h) => {
     return response;
   }
 
-  const updatedAt = new Date().toISOString;
+  const updatedAt = new Date().toISOString();
 
   const index = books.findIndex((book) => book.id === id);
 
