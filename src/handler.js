@@ -1,7 +1,7 @@
 const { nanoid } = require('nanoid');
 const books = require('./book');
 
-const addBooksHandler = (request, h) => {
+const addBook = (request, h) => {
   const {
     name, year, author, summary, publisher, pageCount, readPage, reading,
   } = request.payload;
@@ -50,32 +50,32 @@ const addBooksHandler = (request, h) => {
 
   const response = h.response({
     status: 'fail',
-    message: 'Buku gagal ditambahkan'
+    message: 'Buku gagal ditambahkan',
   });
   response.code(500);
   return response;
 };
 
-const getBooksHandler = (request, h) => {
+const getBook = (request, h) => {
   const { name, reading, finished } = request.query;
 
-  let searchFilterBook = books;
+  let FilterBook = books;
   if (name) {
-    searchFilterBook = searchFilterBook.filter((book) => book.name.toLowerCase().includes(name.toLowerCase()));
+    FilterBook = FilterBook.filter((book) => book.name.toLowerCase().includes(name.toLowerCase()));
   }
 
   if (reading) {
-    searchFilterBook = searchFilterBook.filter((book) => book.reading === (reading === '1'));
+    FilterBook = FilterBook.filter((book) => book.reading === (reading === '1'));
   }
 
   if (finished) {
-    searchFilterBook = searchFilterBook.filter((book) => book.finished === (finished === '1'));
+    FilterBook = FilterBook.filter((book) => book.finished === (finished === '1'));
   }
 
   const response = h.response({
     status: 'success',
     data: {
-      books: searchFilterBook.map((book) => ({
+      books: FilterBook.map((book) => ({
         id: book.id,
         name: book.name,
         publisher: book.publisher,
@@ -87,7 +87,7 @@ const getBooksHandler = (request, h) => {
   return response;
 };
 
-const getBooksIdHandler = (request, h) => {
+const getBookId = (request, h) => {
   const { bookId } = request.params;
 
   const book = books.filter((book) => book.id === bookId)[0];
@@ -109,10 +109,12 @@ const getBooksIdHandler = (request, h) => {
   return response;
 };
 
-const editDataBooksHandler = (request, h) => {
+const editBook = (request, h) => {
   const { bookId } = request.params;
 
-  const { name, year, author, summary, publisher, pageCount, readPage, reading} = request.payload;
+  const {
+    name, year, author, summary, publisher, pageCount, readPage, reading,
+  } = request.payload;
 
   if (!name) {
     const response = h.response({
@@ -133,7 +135,7 @@ const editDataBooksHandler = (request, h) => {
 
   const updatedAt = new Date().toISOString();
 
-  const index = books.findIndex((book) => book.id === id);
+  const index = books.findIndex((book) => book.id === bookId);
 
   if (index !== -1) {
     books[index] = {
@@ -162,7 +164,7 @@ const editDataBooksHandler = (request, h) => {
   response.code(404);
   return response;
 };
-const deleteBooksHandler = (request, h) => {
+const delBook = (request, h) => {
   const { bookId } = request.params;
 
   const index = books.findIndex((book) => book.id === bookId);
@@ -185,5 +187,5 @@ const deleteBooksHandler = (request, h) => {
 };
 
 module.exports = {
-  addBooksHandler, getBooksHandler, getBooksIdHandler, editDataBooksHandler, deleteBooksHandler,
+  addBook, getBook, getBookId, editBook, delBook,
 };
