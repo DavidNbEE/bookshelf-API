@@ -103,9 +103,7 @@ const getBooksIdHandler = (request, h) => {
 const editDataBooksHandler = (request, h) => {
   const { bookId } = request.params;
 
-  const {
-    name, year, author, summary, publisher, pageCount, readPage, reading,
-  } = request.payload;
+  const {name, year, author, summary, publisher, pageCount, readPage, reading} = request.payload;
 
   if (!name) {
     const response = h.response({
@@ -126,7 +124,7 @@ const editDataBooksHandler = (request, h) => {
 
   const updatedAt = new Date().toISOString;
 
-  const index = books.findIndex((note) => note.id === id);
+  const index = books.findIndex((book) => book.id === id);
 
   if (index !== -1) {
     books[index] = {
