@@ -30,7 +30,7 @@ const addBook = (request, h) => {
   const updatedAt = insertedAt;
 
   const newBooks = {
-    id, name, year, author, summary, publisher, pageCount, readPage, reading, insertedAt, updatedAt, finished,
+    id, name, year, author, summary, publisher, pageCount, readPage, finished, reading, insertedAt, updatedAt,
   };
 
   books.push(newBooks);
